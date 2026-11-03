@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>고려 역사 그림책</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --jade:#3f8f86; --jade-dark:#2a6660; --jade-soft:#e6f3f0; --jade-line:#b9dcd5;
+  --ink:#1f2d2b; --muted:#5f716e; --bg:#eef3f1; --card:#ffffff; --line:#dbe5e2;
+  --gold:#b8862f; --gold-soft:#fbf3e2; --red:#c2463d; --red-soft:#fdecea;
+  --blue:#3d6fb5; --blue-soft:#eaf1fb; --ex:#f4f7fb; --ex-line:#d3ddea;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(160deg,#e9f2ef,#dfe8ee);color:var(--ink);
+  font-family:'Noto Sans KR',system-ui,sans-serif;line-height:1.6}
+button,input,textarea,select{font-family:inherit;font-size:inherit}
+.wrap{max-width:1040px;margin:0 auto;padding-block:24px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.sheet{background:var(--card);border-radius:20px;box-shadow:0 10px 30px rgba(30,60,55,.12);overflow:hidden}
+header.top{background:linear-gradient(120deg,#3f8f86,#2f6f8f 60%,#5b5fa8);color:#fff;text-align:center;padding:30px 16px 26px}
+header.top h1{margin:0;font-size:clamp(22px,4vw,32px);font-weight:800;letter-spacing:-.5px;text-wrap:balance}
+header.top p{margin:8px 0 0;opacity:.92;font-size:15px}
+.inner{padding:26px clamp(14px,3vw,34px) 34px}
+h2.q{font-size:19px;margin:0 0 16px}
+.topics{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.topic{background:#f7faf9;border:2px solid var(--line);border-radius:16px;padding:18px;text-align:left;cursor:pointer;transition:.15s;color:inherit}
+.topic:hover{transform:translateY(-2px);border-color:var(--jade-line)}
+.topic.on{border-color:var(--jade);background:var(--jade-soft);box-shadow:0 4px 14px rgba(63,143,134,.22)}
+.topic .ic{font-size:34px;text-align:center;display:block;margin-bottom:8px}
+.topic b{display:block;font-size:17px}
+.topic .sub{display:block;color:var(--muted);font-size:13px;margin:4px 0 8px}
+.topic .desc{display:block;font-size:13.5px}
+.work{margin-top:26px;border-left:5px solid var(--jade);background:#f6faf9;border-radius:16px;padding:20px clamp(12px,2.5vw,24px)}
+.work h2{margin:0 0 14px;font-size:20px}
+.facts4{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.fact{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:14px}
+.fact b{display:block;color:var(--jade-dark);margin-bottom:4px}
+details.more{margin-top:14px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 16px}
+details.more summary{cursor:pointer;font-weight:700;color:var(--jade-dark)}
+details.more ol{margin:10px 0 4px;padding-left:22px;font-size:14.5px}
+details.more ol li{margin-bottom:6px}
+.src{font-size:12.5px;color:var(--muted);margin-top:8px}
+.words{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.word{background:var(--gold-soft);border:1px solid #ecd9ac;border-radius:999px;padding:4px 12px;font-size:13px}
+.think{margin-top:14px;background:var(--blue-soft);border:1px solid #c9d9f0;border-radius:12px;padding:12px 16px;font-size:14.5px}
+.think b{color:var(--blue)}
+.think ul{margin:6px 0 0;padding-left:20px}
+.quote{background:#fff;border-left:4px solid #9fb6dc;padding:6px 12px;margin:8px 0;border-radius:6px;font-size:14px}
+.bookinfo{display:grid;grid-template-columns:2fr 1fr;gap:10px;margin:20px 0 6px}
+.bookinfo label{font-size:13px;font-weight:700;color:var(--muted)}
+input.tx,textarea.tx{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;color:var(--ink)}
+input.tx:focus,textarea.tx:focus{outline:2px solid var(--jade-line);border-color:var(--jade)}
+.editor{margin-top:16px;border:2px solid #7fb9b1;border-radius:16px;background:#f2f9f8;padding:18px clamp(10px,2vw,20px)}
+.editor .head{font-weight:700}
+.editor .head small{display:block;font-weight:400;color:var(--muted)}
+.bar{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0 4px}
+.btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;cursor:pointer;color:var(--ink)}
+.btn:hover{background:#f3f6f5}
+.btn:focus-visible{outline:2px solid var(--jade);outline-offset:2px}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.main{background:linear-gradient(120deg,var(--jade),#2f6f8f);color:#fff;border:0;font-weight:700;padding:11px 22px;border-radius:999px;box-shadow:0 4px 12px rgba(47,111,143,.3)}
+.btn.del{color:var(--red);border-color:#f0c4c0}
+.btn.sm{padding:4px 10px;font-size:13px}
+.scene{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:14px}
+.scene .row1{display:flex;align-items:center;gap:6px;flex-wrap:wrap;border-bottom:1px solid #eef2f1;padding-bottom:10px;margin-bottom:12px}
+.num{width:30px;height:30px;border-radius:50%;background:var(--jade);color:#fff;display:grid;place-items:center;font-weight:800}
+.row1 .sp{flex:1}
+.scene .body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+.fields label{display:block;font-size:13px;font-weight:700;color:var(--muted);margin:0 0 4px}
+.scene input.tx{font-weight:700;margin-bottom:10px}
+.guide{background:var(--gold-soft);border:1px solid #ecd9ac;border-radius:10px;padding:10px 12px;font-size:14px;margin-bottom:10px}
+.guide b{color:var(--gold)}
+.example{background:var(--ex);border:1px solid var(--ex-line);border-radius:10px;padding:10px 12px;font-size:14.5px}
+.example .eh{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px}
+.example .eh b{color:var(--blue)}
+.example p{margin:0}
+.fields textarea{min-height:150px;resize:vertical}
+.count{font-size:12px;color:var(--muted);text-align:right}
+.tips{margin-top:20px;background:var(--red-soft);border:1px solid #f2c9c4;border-radius:14px;padding:14px 18px}
+.tips b{color:var(--red)}
+.tips ul{margin:6px 0 0;padding-left:4px;list-style:none;font-size:14.5px}
+.tips li::before{content:"✏️ "}
+.check{margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 18px;font-size:14.5px}
+.check label{display:block;margin:4px 0;cursor:pointer}
+.finish{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:20px}
+.empty{color:var(--muted);text-align:center;padding:24px 0 6px;font-size:15px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-size:14px;opacity:0;transition:.25s;pointer-events:none;z-index:50;max-width:calc(100% - 32px);text-align:center}
+.toast.show{opacity:1}
+.modal{position:fixed;inset:0;background:rgba(20,30,30,.55);display:flex;align-items:center;justify-content:center;z-index:60;padding:16px}
+.modal[hidden]{display:none}
+.modal .box{background:#fff;border-radius:16px;padding:22px;max-width:440px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.3)}
+.modal .box p{margin:0 0 16px;white-space:pre-line}
+.modal .box .acts{display:flex;gap:8px;justify-content:flex-end}
+.modal textarea{width:100%;height:240px;margin-bottom:12px;font-size:13px}
+@media (max-width:720px){
+  .scene .body{grid-template-columns:1fr}
+  .bookinfo{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){ .topic,.toast{transition:none} }
+</style>
+</head>
+<body>
+<div class="wrap">
+ <div class="sheet">
+  <header class="top">
+   <h1>고려 역사 그림책 장면 구상 활동지</h1>
+   <p>장면별 글을 먼저 완성하고, 캔바에서 그림과 함께 그림책으로 만들어 보세요!</p>
+  </header>
+  <div class="inner">
+   <h2 class="q">📚 어떤 이야기를 그림책으로 만들까요?</h2>
+   <div class="topics" id="topics"></div>
+   <div id="work"><p class="empty">위에서 이야기를 하나 골라 보세요. 👆</p></div>
+  </div>
+ </div>
+</div>
+
+<div class="modal" id="askModal" hidden><div class="box"><p id="askMsg"></p><div class="acts"><button class="btn" id="askNo">취소</button><button class="btn del" id="askYes">네, 할게요</button></div></div></div>
+<div class="modal" id="copyModal" hidden><div class="box"><p>아래 글을 모두 선택(Ctrl+A)한 뒤 복사(Ctrl+C)해서 캔바에 붙여 넣으세요.</p><textarea class="tx" id="copyText" readonly></textarea><div class="acts"><button class="btn" id="copyClose">닫기</button></div></div></div>
+<div class="toast" id="toast"></div>
+<input type="file" id="loadFile" accept=".json,application/json" hidden>
+
+<script>
+/* ───────────── 주제별 자료 ─────────────
+   scenes: [장면 제목, 그림 아이디어, 예시 글] */
+const TOPICS = {
+ khitan:{
+  icon:'🐫', name:'고려와 거란의 전쟁', sub:'외교 담판과 귀주 대첩',
+  desc:'서희의 말솜씨와 강감찬의 지혜로 나라를 지킨 이야기',
+  when:'993년~1019년, 거란이 세 번 고려에 쳐들어옴',
+  where:'고려 북쪽(강동 6주), 개경, 귀주',
+  who:'서희, 강감찬, 양규, 고려 군사와 백성, 거란 장수 소손녕',
+  meaning:'외교와 끈질긴 싸움으로 나라를 지켰고, 고려·송·거란의 관계가 안정됨',
+  facts:[
+   '거란은 발해를 멸망시킨 나라였어요. 태조 왕건은 거란이 보낸 사신을 섬으로 보내고, 선물로 온 낙타 50마리를 만부교 다리 아래에 묶어 두었어요(942).',
+   '거란의 1차 침입(993) 때 서희는 거란 장수 소손녕과 담판을 벌였어요. 고려는 송과 교류를 끊기로 약속하고 강동 6주 지역을 얻었어요.',
+   '고려가 송과 관계를 계속 이어 가자 거란은 2차 침입(1010)을 했어요. 개경을 빼앗기기도 했지만 양규 등의 끈질긴 저항과 외교로 위기를 넘겼어요.',
+   '거란은 강동 6주를 돌려 달라며 3차 침입(1018)을 했어요. 강감찬이 이끈 고려군은 1019년 귀주에서 거란군을 크게 물리쳤어요(귀주 대첩). 살아 돌아간 거란군은 겨우 수천 명이었다고 해요.',
+   '전쟁 뒤 고려는 북쪽 국경에 천리장성을 쌓아 외적의 침입에 대비했어요.'
+  ],
+  source:'출처: 초등 사회 5-2 교과서 「고려와 주변 나라들의 관계」, 『고려사』',
+  words:[['담판','서로 맞선 사람들이 의논해 옳고 그름을 판단함'],['강동 6주','서희의 담판으로 얻은 압록강 동쪽의 여섯 지역'],['송','960년~1279년 중국에 있었던 나라'],['천리장성','압록강 어귀에서 동해안까지 쌓은 긴 성']],
+  think:['서희는 싸우지 않고 어떻게 땅을 얻을 수 있었을까요?','귀주 대첩에서 고려군이 이길 수 있었던 까닭은 무엇일까요?'],
+  quotes:[],
+  scenes:[
+   ['거란의 낙타 선물과 왕건의 결정','거란 사신이 낙타 50마리를 끌고 온 모습, 단호한 표정의 왕건',
+    '거란이 사신과 낙타 50마리를 보내 친하게 지내자고 했어요. 하지만 태조 왕건은 "발해를 멸망시킨 거란과는 친하게 지낼 수 없다!"라고 말했어요. 왕건은 사신을 섬으로 보내고, 낙타는 만부교 다리 아래에 묶어 두었어요.'],
+   ['거란의 1차 침입 (993)','압록강을 건너오는 거란의 많은 군사, 걱정하는 고려 사람들',
+    '993년, 거란의 많은 군사가 압록강을 건너 고려로 쳐들어왔어요. 거란 장수 소손녕은 "고려 땅을 내놓아라!" 하고 큰소리를 쳤어요. 고려 사람들은 걱정이 가득했어요.'],
+   ['서희의 외교 담판','마주 앉은 서희와 소손녕, 서희의 당당한 표정과 말풍선',
+    '서희는 거란 진영으로 찾아가 소손녕과 마주 앉았어요. "고려는 고구려를 이은 나라요. 여진이 길을 막고 있어 거란과 오가지 못했을 뿐이오." 서희의 당당한 말에 거란군은 물러났고, 고려는 강동 6주를 얻었어요.'],
+   ['거란의 2차 침입 (1010)','불타는 개경, 끝까지 맞서 싸우는 양규와 고려 군사들',
+    '고려가 송과 계속 사이좋게 지내자, 1010년 거란이 다시 쳐들어왔어요. 수도 개경까지 빼앗겼지만 양규 장군과 고려 군사들은 끝까지 싸우며 거란군을 괴롭혔어요. 결국 거란군은 물러갔어요.'],
+   ['강감찬의 귀주 대첩 (1019)','바람이 고려군 쪽에서 부는 들판, 앞장선 강감찬과 달아나는 거란군',
+    '1018년, 거란이 강동 6주를 돌려 달라며 또 쳐들어왔어요. 강감찬은 귀주에서 거란군을 기다렸어요. "바람의 방향이 바뀌었다! 공격하자!" 고려군은 거란군을 크게 물리쳤고, 살아 돌아간 거란군은 겨우 수천 명이었어요.'],
+   ['천리장성을 쌓다','힘을 모아 긴 성을 쌓는 사람들, 평화로워진 마을',
+    '전쟁이 끝난 뒤 고려는 다시는 침입을 당하지 않도록 북쪽 국경에 긴 성을 쌓았어요. 압록강 어귀에서 동해안까지 이어지는 천리장성이에요. 백성들의 생활도 점차 편안해졌어요.']
+  ],
+  tips:['서희와 강감찬은 고려 관리의 옷(관복)을 입은 모습이 어울려요','거란군은 말을 탄 모습으로 넣으면 고려군과 구분하기 쉬워요','압록강, 강동 6주, 귀주가 표시된 지도를 한 장면에 넣어 보세요','담판 장면은 두 사람의 표정과 말풍선이 중요해요']
+ },
+ jurchen:{
+  icon:'🏯', name:'고려와 여진의 전쟁', sub:'윤관과 동북 9성',
+  desc:'별무반을 만들어 9성을 쌓았지만 다시 돌려준 이야기',
+  when:'1104년~1109년 (본격적인 정벌은 1107년)',
+  where:'고려의 동북쪽 국경 너머 (지금의 함경도 지역)',
+  who:'윤관, 오연총, 숙종과 예종, 별무반, 여진(완안부)',
+  meaning:'크게 이겨 9성을 쌓았지만 지키기 어려워 2년 만에 돌려줌. 여진은 그 뒤 금나라를 세움',
+  facts:[
+   '고려와 여진은 오랫동안 대체로 사이가 좋았어요. 그런데 11세기 후반 여진의 완안부가 여러 부족을 모으며 강해졌고, 고려 국경 가까이까지 세력을 넓혔어요.',
+   '1104년 고려군은 여진에게 두 번 크게 졌어요. 윤관도 군사의 절반 이상이 다치거나 죽는 피해를 입고, 여진과 화해를 맺고 돌아왔어요.',
+   '윤관은 "말을 탄 여진 기병에게 걸어서 싸우는 고려 보병이 이기기 어렵다"고 보고, 숙종에게 새 군대인 별무반을 만들자고 건의했어요. 별무반은 신기군(말 탄 군사), 신보군(걸어서 싸우는 군사), 항마군(승려 군사)으로 이루어졌어요.',
+   '숙종이 세상을 떠난 뒤, 예종은 1107년 윤관을 대장(원수), 오연총을 부대장(부원수)으로 삼아 17만 명의 군대를 보냈어요. 고려군은 빠르게 나아가 큰 승리를 거두었어요.',
+   '윤관은 새로 얻은 땅에 성을 쌓아 9성을 완성하고, 공험진에 비석을 세워 국경을 정했어요. 남쪽 지방의 백성 수만 집을 옮겨 살게 했어요.',
+   '하지만 삶의 터전을 잃은 여진은 성을 쌓은 지 한 달쯤 지나자 거세게 반격했어요. 9성은 서로 멀고 땅이 험해 지키기 어려웠고, 고려 백성도 전쟁 물자, 굶주림, 전염병으로 괴로워했어요.',
+   '1109년 여진이 "9성을 돌려주면 고려를 받들겠다"며 화해를 청했어요. 신하들의 의견은 돌려주자는 쪽이 많았고, 고려는 9성을 쌓은 지 2년 만에 땅을 돌려주었어요.',
+   '윤관은 "명분 없는 전쟁을 일으켰다"는 비판을 받고 관직에서 물러났다가 1111년 세상을 떠났어요. 여진은 다시 힘을 키워 1115년 금나라를 세웠어요.',
+   '윤관의 9성 경험은 뒷날 고려 말·조선 초에 북쪽 땅을 되찾을 때 "원래 우리 땅"이라는 근거가 되었어요. 9성이 정확히 어디에 있었는지는 지금도 학자마다 의견이 달라요.'
+  ],
+  source:'출처: 우리역사넷(국사편찬위원회) 「윤관의 9성 설치 - 실패로 끝난 여진 정벌과 북방 개척의 꿈」',
+  words:[['별무반','윤관의 건의로 만든 특별 군대 (신기군·신보군·항마군)'],['기병','말을 타고 싸우는 군사'],['보병','걸어서 싸우는 군사'],['동북 9성','윤관이 여진을 물리치고 동북쪽에 쌓은 9개의 성'],['완안부','여진의 여러 부족을 하나로 모은 부족. 뒤에 금나라를 세움'],['부월','왕이 장군에게 군대를 맡긴다는 뜻으로 주는 도끼']],
+  think:['여진 사람들은 9성이 생겨 살던 땅을 잃었을 때 어떤 마음이었을까요?','내가 고려의 신하였다면 9성을 "지키자", "돌려주자" 중 어느 쪽을 주장했을까요? 까닭은?','윤관의 여진 정벌에서 잘한 점과 아쉬운 점을 한 가지씩 찾아보세요.'],
+  quotes:[
+   ['병마부사 박경작이 윤관에게','"이미 공을 세웠으니 군대를 거두어야 합니다. 적의 땅 깊이 성을 쌓는 것은 지금은 쉬워도 나중에 지키기 어려울 것입니다."'],
+   ['신하 김인존이 예종에게','"땅은 본래 백성을 기르기 위한 것인데, 지금은 성을 두고 다투다 사람이 죽습니다. 땅을 돌려주고 백성을 쉬게 하는 것이 낫습니다."']
+  ],
+  scenes:[
+   ['여진이 강해지다','여러 부족을 하나로 모은 여진 완안부, 국경 가까이 다가온 여진 군대',
+    '고려와 여진은 오랫동안 대체로 사이좋게 지냈어요. 그런데 여진의 완안부가 여러 부족을 하나로 모으며 점점 강해졌어요. 1104년, 여진 군대가 고려 국경 가까운 정주 관문 밖까지 내려왔어요.'],
+   ['말을 탄 여진군에게 지다 (1104)','말을 탄 여진 기병과 밀리는 고려 보병, 깊이 고민하는 윤관',
+    '윤관이 군대를 이끌고 여진과 싸웠지만, 말을 탄 여진군을 당해 내기 어려웠어요. 고려 군사의 절반 넘게 다치거나 목숨을 잃었어요. 윤관은 여진과 화해를 맺고 돌아오며 "우리는 왜 졌을까?" 하고 깊이 고민했어요.'],
+   ['별무반을 만들다','숙종에게 건의하는 윤관, 훈련하는 신기군·신보군·항마군',
+    '윤관은 숙종에게 말했어요. "우리 군사는 걸어서 싸우고, 여진은 말을 타고 싸워서 이기기 어렵습니다." 그래서 말을 탄 신기군, 걸어서 싸우는 신보군, 승려들로 이루어진 항마군을 모아 별무반을 만들었어요.'],
+   ['17만 대군의 출정 (1107)','윤관과 오연총에게 부월을 내려 주는 예종, 북쪽으로 떠나는 많은 군사',
+    '숙종이 세상을 떠나고 예종이 왕이 되었어요. 1107년, 예종은 윤관을 대장으로, 오연총을 부대장으로 삼고 부월을 내려 주었어요. 17만 명의 고려군은 여진을 향해 나아가 큰 승리를 거두었어요.'],
+   ['동북 9성을 쌓다','성을 쌓는 고려군, 국경에 비석을 세우는 윤관, 농사짓는 백성',
+    '윤관은 새로 얻은 땅에 성을 쌓아 9성을 만들고, 국경에 비석을 세웠어요. 남쪽 지방의 많은 백성이 이곳으로 옮겨 와 농사를 지었어요. 고려 사람들은 북쪽 땅을 넓혔다며 기뻐했어요.'],
+   ['여진의 반격','성을 되찾으려 공격하는 여진, 살 곳을 잃은 여진 사람들의 표정',
+    '하지만 살던 땅을 잃은 여진 사람들은 "우리 땅을 돌려 달라!"며 거세게 공격했어요. 9성은 서로 멀리 떨어져 있고 길이 험해 지키기 어려웠어요. 고려 백성들도 오랜 전쟁과 굶주림, 전염병으로 지쳐 갔어요.'],
+   ['9성을 돌려주다 (1109)','예종과 신하들의 회의, "지키자"와 "돌려주자" 말풍선',
+    '1109년, 여진이 "9성을 돌려주면 고려를 받들겠다"며 화해를 청했어요. 신하 김인존은 "땅은 백성을 기르기 위한 것인데, 성을 두고 다투다 사람이 죽습니다."라고 말했어요. 고려는 고민 끝에 9성을 쌓은 지 2년 만에 여진에게 돌려주었어요.'],
+   ['그 뒤의 이야기','관직에서 물러나 쓸쓸해하는 윤관, 금나라를 세우는 여진',
+    '윤관은 "명분 없는 전쟁을 일으켰다"는 비판을 받고 관직에서 물러났고, 1111년에 세상을 떠났어요. 한편 여진은 점점 강해져 1115년 금나라를 세웠어요. 윤관의 9성은 뒷날 북쪽 땅을 되찾을 때 "원래 고려 땅"이라는 근거가 되었어요.']
+  ],
+  tips:['조선 후기 그림 「척경입비도」에는 윤관이 국경에 비석을 세우는 모습이 그려져 있어요. 참고해 보세요','고려군(보병)과 여진군(기병)의 차이가 잘 보이게 해 보세요','윤관을 무조건 영웅으로만, 여진을 무조건 나쁜 편으로만 그리지 말고 양쪽의 입장을 생각해 보세요','승리의 기쁨과 9성을 돌려줄 때의 아쉬움, 두 가지 감정을 표정으로 나타내 보세요']
+ },
+ mongol:{
+  icon:'🐎', name:'고려의 대몽 항쟁', sub:'강화도 천도와 백성들의 저항',
+  desc:'약 30년 동안 몽골에 맞서 끈질기게 싸운 이야기',
+  when:'1231년부터 약 30년 동안 몽골이 여러 번 침입',
+  where:'귀주성, 강화도, 처인성(용인), 충주성',
+  who:'박서, 김윤후, 고려 군사와 백성(부곡민·노비 포함)',
+  meaning:'신분에 상관없이 모두가 힘을 합쳐 싸웠고, 그 과정에서 팔만대장경도 만들어짐',
+  facts:[
+   '북쪽에서 여러 부족을 통일한 몽골이 1231년 고려에 쳐들어왔어요. 귀주성에서는 박서 장군과 군사, 백성이 끝까지 성을 지켜 냈어요.',
+   '고려는 1232년 수도를 개경에서 강화도로 옮기고 몽골에 맞섰어요. 몽골군은 말을 잘 탔지만 바다에서 싸우는 데에는 익숙하지 않았어요.',
+   '승려 김윤후는 처인성에서 차별받던 백성(부곡민)과 함께 싸웠고, 몽골군 총사령관 살리타를 쓰러뜨려 몽골군을 물러나게 했어요(1232).',
+   '몽골이 또 침입하자 김윤후는 충주성에서 "신분에 상관없이 힘써 싸운 사람에게 벼슬을 주겠다"고 약속하고 노비 문서를 불태웠어요. 노비를 비롯한 모든 사람이 힘을 합쳐 몽골군을 물리쳤어요.',
+   '몽골의 침입으로 초조대장경판이 불타 없어지자, 고려 사람들은 부처님의 힘으로 나라를 지키려고 팔만대장경을 다시 만들었어요.',
+   '전쟁이 길어지며 땅은 황폐해지고 많은 백성이 죽거나 포로로 끌려갔어요. 고려는 몽골의 제안을 받아들여 전쟁을 끝내고 수도를 다시 개경으로 옮겼어요.',
+   '그 뒤 고려는 몽골(원)의 간섭을 받았지만, 교류가 늘어 족두리·만두 같은 몽골 풍습이 고려에, 상추쌈·유밀과 같은 고려 풍습이 몽골에 전해졌어요.'
+  ],
+  source:'출처: 초등 사회 5-2 교과서 「고려와 주변 나라들의 관계」, 『고려사』',
+  words:[['천도','나라의 수도를 옮김'],['부곡','차별받던 사람들이 모여 살던 마을'],['노비 문서','노비의 신분을 적어 둔 문서'],['원','몽골이 중국을 차지하고 세운 나라 이름']],
+  think:['처인성과 충주성에서 고려가 몽골군을 물리칠 수 있었던 까닭은 무엇일까요?','노비 문서가 불탈 때 노비들은 어떤 마음이었을까요?'],
+  quotes:[],
+  scenes:[
+   ['몽골의 침입 (1231)','말을 타고 빠르게 몰려오는 몽골군, 두려워하는 고려 사람들',
+    '1231년, 말을 잘 타는 몽골군이 고려로 쳐들어왔어요. 몽골은 북쪽의 여러 부족을 통일하고 넓은 땅을 차지한 강한 나라였어요. 고려 사람들은 두려움에 떨었어요.'],
+   ['귀주성을 지켜라','성벽 위에서 힘을 모아 싸우는 박서 장군과 군사, 백성',
+    '몽골군이 귀주성을 에워싸고 공격했어요. 박서 장군과 군사, 백성들은 힘을 합쳐 성을 지켰어요. 몽골군은 여러 번 공격했지만 끝내 성을 빼앗지 못했어요.'],
+   ['강화도로 수도를 옮기다 (1232)','배를 타고 바다를 건너는 왕과 관리, 백성들',
+    '1232년, 고려는 수도를 개경에서 강화도로 옮겼어요. 몽골군은 말을 잘 탔지만 바다에서 싸우는 데에는 익숙하지 않았어요. 왕과 관리, 백성들은 배를 타고 바다를 건넜어요.'],
+   ['처인성 전투','김윤후와 처인부곡 사람들, 쓰러지는 몽골군 총사령관',
+    '승려 김윤후는 처인성에서 차별받던 처인부곡 사람들과 함께 몽골군에 맞섰어요. 싸움 중에 몽골군 총사령관 살리타가 화살에 맞아 쓰러졌어요. 대장을 잃은 몽골군은 물러갔어요.'],
+   ['충주성의 노비 문서','노비 문서를 불태우는 김윤후, 함께 싸우는 여러 신분의 사람들',
+    '몽골군이 충주성을 70일 넘게 에워쌌어요. 김윤후는 "신분에 상관없이 힘써 싸우면 모두 벼슬을 주겠다!"며 노비 문서를 불태웠어요. 노비를 비롯한 모든 사람이 힘을 합쳐 몽골군을 물리쳤어요.'],
+   ['팔만대장경을 만들다','나무판에 한 글자씩 정성껏 새기는 사람들',
+    '몽골의 침입으로 초조대장경판이 불타 버렸어요. 고려 사람들은 부처님의 힘으로 나라를 지키고 싶다는 마음을 모아, 오랜 시간 정성껏 팔만대장경을 새겼어요. 경판이 팔만 장이 넘었지만 틀린 글자가 거의 없었어요.'],
+   ['전쟁이 끝나다','지친 백성들, 다시 개경으로 돌아가는 행렬',
+    '약 30년 동안 이어진 전쟁으로 고려 땅은 황폐해지고, 많은 백성이 죽거나 포로로 끌려갔어요. 고려는 전쟁을 끝내자는 몽골의 제안을 받아들였고, 수도를 다시 개경으로 옮겼어요.']
+  ],
+  tips:['몽골군은 말을 타고 활을 든 모습이 어울려요','김윤후는 승려였어요. 승려의 옷과 머리 모양을 생각해 보세요','충주성 장면에서는 신분이 다른 사람들이 함께 싸우는 모습을 담아 보세요','강화도는 바다로 둘러싸인 섬이라는 점이 잘 드러나게 해 보세요']
+ },
+ culture:{
+  icon:'🏺', name:'고려의 문화재', sub:'고려청자 · 팔만대장경 · 금속 활자',
+  desc:'세계에 자랑할 만한 고려 사람들의 기술과 정성 이야기',
+  when:'고려 시대 (918년~1392년)',
+  where:'강진(청자 가마), 강화도·해인사(팔만대장경), 청주 흥덕사(직지)',
+  who:'도공, 장인, 승려, 문익점 등 고려 사람들',
+  meaning:'상감 청자, 팔만대장경, 세계 최초의 금속 활자로 고려만의 뛰어난 문화를 꽃피움',
+  facts:[
+   '고려 사람들은 중국의 청자 기술을 받아들였지만, 상감 기법을 써서 고려만의 독창적인 청자를 만들었어요.',
+   '상감 기법은 그릇 겉면에 무늬를 새겨 파내고, 다른 색의 흙으로 메꾼 뒤 유약을 발라 굽는 방법이에요.',
+   '청자는 비싸고 귀해서 주로 지배층이 썼어요. 탐진(강진)에서 만든 청자는 배에 실려 개경으로 옮겨졌고, 태안 앞바다에서 청자를 실은 고려의 배(보물선)가 발견되기도 했어요.',
+   '팔만대장경은 몽골의 침입 때 나라를 지키려는 마음으로 만들었어요. 경판이 팔만여 장이나 되는데도 글자 모양이 고르고 틀린 글자가 거의 없어요.',
+   '팔만대장경판은 지금 합천 해인사에 있어요. 경판을 보관하는 장경판전은 온도와 습도가 일정하게 유지되도록 조선 시대에 지은 건물이에요.',
+   '고려 사람들은 세계 최초로 금속 활자를 발명했어요. 『직지』(1377)는 오늘날 남아 있는 세계에서 가장 오래된 금속 활자 인쇄본으로, 지금 프랑스 국립 도서관에 있어요.',
+   '금속 활자 만드는 순서: 밀랍에 글자 새기기 → 황토 반죽으로 감싸기 → 쇳물 붓기 → 활자 떼기 → 활자 배열하기 → 인쇄하기',
+   '고려 말 문익점은 원에서 목화씨를 가져와 장인 정천익과 함께 3년 만에 재배에 성공했어요. 그 뒤 따뜻한 무명옷이 널리 퍼졌어요.'
+  ],
+  source:'출처: 초등 사회 5-2 교과서 「고려의 문화와 사람들의 생활 모습」',
+  words:[['상감 기법','무늬를 파내고 다른 색 흙으로 메워 굽는 기법'],['대장경','부처의 가르침이 담긴 경전을 모아 완성한 것'],['밀랍','꿀벌이 벌집을 만들 때 분비하는 물질'],['무명','목화솜에서 실을 뽑아 만든 부드럽고 따뜻한 옷감']],
+  think:['목판 인쇄와 비교해 금속 활자는 어떤 점이 좋았을까요?','팔만대장경을 만든 사람들은 어떤 마음으로 글자를 새겼을까요?'],
+  quotes:[],
+  scenes:[
+   ['청자를 빚는 도공','강진의 가마 옆에서 흙으로 그릇을 빚는 도공',
+    '강진의 가마 옆에서 도공이 흙을 반죽해 그릇 모양을 빚었어요. 청자를 만들려면 아주 높은 온도로 구울 수 있는 가마와 불을 다루는 기술이 필요했어요. 도공은 "맑은 푸른빛이 나야 할 텐데." 하며 정성을 다했어요.'],
+   ['상감 기법으로 무늬 넣기','학과 구름 무늬를 파내고 흰 흙, 검은 흙으로 메우는 과정',
+    '도공은 그릇 겉면에 학과 구름 무늬를 새겨 파냈어요. 파낸 자리를 흰 흙과 검은빛을 내는 흙으로 메우고, 유약을 발라 구웠어요. 이렇게 고려만의 독창적인 상감 청자가 태어났어요.'],
+   ['청자를 실은 보물선','청자를 가득 싣고 개경으로 가는 배, 오늘날 바닷속 발굴 모습',
+    '탐진(강진)에서 만든 청자를 가득 실은 배가 개경을 향해 떠났어요. 그런데 태안 앞바다에서 배가 그만 가라앉고 말았어요. 오랜 세월이 흘러 오늘날, 바닷속에서 청자를 실은 고려의 보물선이 발견되었어요.'],
+   ['팔만대장경판 새기기','나라를 지키려는 마음으로 나무판에 글자를 새기는 사람들',
+    '몽골군이 쳐들어오자 고려 사람들은 부처님의 힘으로 나라를 지키려고 대장경을 새기기로 했어요. 사람들은 나무판에 한 글자 한 글자 정성껏 새겼어요. 경판이 팔만 장이 넘었지만 틀린 글자가 거의 없었어요.'],
+   ['금속 활자 만들기','밀랍에 글자 새기기 → 황토로 감싸기 → 쇳물 붓기 과정',
+    '장인은 먼저 밀랍에 글자를 새기고 황토 반죽으로 감쌌어요. 그 안에 뜨거운 쇳물을 붓고, 쇳물이 식으면 활자를 떼어 냈어요. 금속 활자는 쉽게 변하지 않고, 활자를 바꿔 끼워 여러 가지 책을 찍을 수 있었어요.'],
+   ['『직지』를 인쇄하다 (1377)','청주 흥덕사에서 활자를 배열하고 종이에 찍는 모습',
+    '1377년, 청주 흥덕사에서 금속 활자로 『직지』를 찍었어요. 활자를 하나씩 배열하고 먹을 발라 종이에 찍어 냈어요. 『직지』는 오늘날 남아 있는 세계에서 가장 오래된 금속 활자 인쇄본으로, 지금은 프랑스 국립 도서관에 있어요.'],
+   ['문익점의 목화씨','목화씨를 심고 기르는 문익점과 정천익, 무명옷을 입고 기뻐하는 백성',
+    '문익점은 원에 사신으로 갔다가 목화씨를 가지고 돌아왔어요. 장인 정천익과 함께 3년 동안 애쓴 끝에 목화 기르기에 성공했어요. 10년도 되지 않아 따뜻한 무명옷이 온 나라에 퍼졌어요.']
+  ],
+  tips:['고려청자는 맑은 푸른빛(비색)이 특징이에요','학, 구름, 국화 같은 상감 무늬가 잘 보이게 해 보세요','팔만대장경판은 직사각형 나무판에 글자가 빼곡히 새겨진 모습이에요','과정을 보여 줄 때는 번호를 붙여 순서가 잘 보이게 해 보세요']
+ }
+};
+const ORDER = ['khitan','jurchen','mongol','culture'];
+
+/* ───────────── 저장 ───────────── */
+const KEY = 'goryeoPictureBook_v2';
+let store = {};
+try{ store = JSON.parse(localStorage.getItem(KEY)) || {}; }catch(e){ store = {}; }
+let cur = null;
+let saveTimer = null;
+function saveNow(){
+  try{ localStorage.setItem(KEY, JSON.stringify(store)); }
+  catch(e){ toast('⚠️ 자동 저장이 되지 않았어요. [파일로 저장]을 눌러 보관하세요.'); }
+}
+function save(){ clearTimeout(saveTimer); saveTimer = setTimeout(saveNow, 400); }
+const uid = () => Math.random().toString(36).slice(2,9);
+function bookFor(key){
+  if(!store[key]){
+    const T = TOPICS[key];
+    store[key] = {title:T.name+' 이야기', author:'', scenes:T.scenes.map(([t,g,ex])=>({id:uid(), title:t, guide:g, example:ex, text:''}))};
+  }
+  return store[key];
+}
+function toast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(el._t); el._t = setTimeout(()=>el.classList.remove('show'), 2400);
+}
+/* claude.ai에 올린 페이지 안에서는 다운로드가 막혀 있어 downloads 기능으로 대신함 */
+const inViewer = () => !!(window.claude && window.claude.use);
+function askConfirm(msg){
+  return new Promise(res=>{
+    const m = document.getElementById('askModal');
+    document.getElementById('askMsg').textContent = msg;
+    m.hidden = false;
+    const done = v => { m.hidden = true; res(v); };
+    document.getElementById('askYes').onclick = () => done(true);
+    document.getElementById('askNo').onclick = () => done(false);
+  });
+}
+async function offerFile(filename, data, okMsg){
+  if(inViewer()){
+    const dl = await window.claude.use('downloads');
+    if(!dl){ toast('이 화면에서는 파일을 받을 수 없어요.'); return; }
+    try{ await dl.save({filename, data}); toast(okMsg); }
+    catch(e){ if(e && e.code!=='declined') toast('파일을 받지 못했어요. 잠시 뒤 다시 눌러 보세요.'); }
+    return;
+  }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([data]));
+  a.download = filename; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+  toast(okMsg);
+}
+const safeName = s => String(s).replace(/[\\/:*?"<>|]/g,'').trim();
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ───────────── 주제 카드 ───────────── */
+function renderTopics(){
+  document.getElementById('topics').innerHTML = ORDER.map(k=>{
+    const T = TOPICS[k];
+    return `<button class="topic ${cur===k?'on':''}" data-k="${k}">
+      <span class="ic">${T.icon}</span><b>${T.name}</b><span class="sub">${T.sub}</span><span class="desc">${T.desc}</span></button>`;
+  }).join('');
+  document.querySelectorAll('.topic').forEach(b=>b.onclick=()=>{ cur=b.dataset.k; renderTopics(); renderWork(); document.getElementById('work').scrollIntoView({behavior:'smooth'}); });
+}
+
+/* ───────────── 활동 영역 ───────────── */
+function renderWork(){
+  const T = TOPICS[cur], B = bookFor(cur);
+  document.getElementById('work').innerHTML = `
+  <div class="work">
+    <h2>${T.icon} ${T.name} 그림책 장면 구상하기</h2>
+    <div class="facts4">
+      <div class="fact"><b>🕰️ 언제</b>${T.when}</div>
+      <div class="fact"><b>📍 어디서</b>${T.where}</div>
+      <div class="fact"><b>👤 누가</b>${T.who}</div>
+      <div class="fact"><b>🌟 의미</b>${T.meaning}</div>
+    </div>
+    <details class="more">
+      <summary>📖 역사 이야기 더 알아보기 (${T.facts.length}개)</summary>
+      <ol>${T.facts.map(f=>`<li>${f}</li>`).join('')}</ol>
+      ${T.quotes.length?`<div style="margin-top:8px;font-weight:700;font-size:14px">🗣️ 그때 사람들은 이렇게 말했어요</div>`+T.quotes.map(([who,q])=>`<div class="quote"><b>${who}</b><br>${q}</div>`).join(''):''}
+      <div class="src">${T.source}</div>
+    </details>
+    <div class="words">${T.words.map(([a,b])=>`<span class="word">📌 <b>${a}</b> : ${b}</span>`).join('')}</div>
+    <div class="think"><b>🤔 생각해 보기</b><ul>${T.think.map(q=>`<li>${q}</li>`).join('')}</ul></div>
+
+    <div class="bookinfo">
+      <div><label for="bTitle">📕 내 그림책 제목</label><input class="tx" id="bTitle" value="${esc(B.title)}" maxlength="40"></div>
+      <div><label for="bAuthor">✍️ 지은이</label><input class="tx" id="bAuthor" value="${esc(B.author)}" placeholder="예) 5학년 2반 홍길동" maxlength="30"></div>
+    </div>
+
+    <div class="editor">
+      <div class="head">✨ 나만의 그림책 장면 편집하기<small>예시 글을 읽고, 내 말로 바꾸어 써 보세요. 장면을 고치거나 새 장면을 넣어도 좋아요. 완성한 글은 [캔바용 글 복사하기]로 옮길 수 있어요.</small></div>
+      <div class="bar"><button class="btn main" id="addEnd">＋ 새 장면 추가하기</button></div>
+      <div id="scenes"></div>
+    </div>
+
+    <div class="tips"><b>🎨 캔바에서 그림을 넣을 때 팁</b><ul>${T.tips.map(t=>`<li>${t}</li>`).join('')}</ul></div>
+
+    <div class="check"><b>✅ 완성하기 전에 확인해요</b>
+      <label><input type="checkbox"> 날짜, 장소, 인물 이름을 역사 사실대로 썼나요?</label>
+      <label><input type="checkbox"> 장면의 순서가 일이 일어난 순서와 맞나요?</label>
+      <label><input type="checkbox"> 예시 글을 그대로 옮기지 않고 내 말로 바꾸어 썼나요?</label>
+      <label><input type="checkbox"> 마지막 장면에 이 사건의 의미나 나의 생각을 담았나요?</label>
+    </div>
+
+    <div class="finish">
+      <button class="btn main" id="doCopy">📋 캔바용 글 복사하기</button>
+      <button class="btn" id="doTxt">📄 글 파일(.txt) 받기</button>
+      <button class="btn" id="doExport">💾 파일로 저장</button>
+      <button class="btn" id="doImport">📂 파일 불러오기</button>
+      <button class="btn del" id="doReset">↺ 처음 상태로</button>
+    </div>
+  </div>`;
+  document.getElementById('bTitle').oninput = e => { B.title = e.target.value; save(); };
+  document.getElementById('bAuthor').oninput = e => { B.author = e.target.value; save(); };
+  document.getElementById('addEnd').onclick = () => { B.scenes.push(blankScene()); saveNow(); renderScenes(); scrollToScene(B.scenes.length-1); };
+  document.getElementById('doCopy').onclick = copyAll;
+  document.getElementById('doTxt').onclick = () => { saveNow(); offerFile(`${safeName(B.title)||'그림책'}.txt`, bookText(), '글 파일을 받았어요.'); };
+  document.getElementById('doExport').onclick = exportFile;
+  document.getElementById('doImport').onclick = () => document.getElementById('loadFile').click();
+  document.getElementById('doReset').onclick = async () => {
+    if(!await askConfirm('이 주제에 쓴 글이 모두 지워지고 처음 장면으로 돌아가요. 계속할까요?')) return;
+    delete store[cur]; saveNow(); renderWork();
+  };
+  renderScenes();
+}
+const blankScene = () => ({id:uid(), title:'', guide:'', example:'', text:''});
+function scrollToScene(i){ const el = document.querySelectorAll('.scene')[i]; if(el) el.scrollIntoView({behavior:'smooth', block:'center'}); }
+
+/* ───────────── 장면 카드 ───────────── */
+function renderScenes(){
+  const B = bookFor(cur), box = document.getElementById('scenes');
+  box.innerHTML = '';
+  B.scenes.forEach((s,i)=>{
+    const el = document.createElement('div');
+    el.className = 'scene';
+    el.innerHTML = `
+      <div class="row1">
+        <span class="num">${i+1}</span>
+        <button class="btn sm" data-a="up" ${i===0?'disabled':''} title="위로">↑</button>
+        <button class="btn sm" data-a="down" ${i===B.scenes.length-1?'disabled':''} title="아래로">↓</button>
+        <span class="sp"></span>
+        <button class="btn sm" data-a="ins">사이에 추가</button>
+        <button class="btn sm del" data-a="del">삭제</button>
+      </div>
+      <input class="tx" data-f="title" value="${esc(s.title)}" placeholder="장면 제목을 써 보세요" maxlength="40" aria-label="장면 제목">
+      <div class="body">
+        <div>
+          <div class="guide"><b>🎨 그림 아이디어</b><br>${s.guide?esc(s.guide):'이 장면에 어떤 그림을 넣을지 생각해 보세요.'}</div>
+          ${s.example?`<div class="example"><div class="eh"><b>📝 예시 글</b><button class="btn sm" data-a="useEx">예시 글 가져오기</button></div><p>${esc(s.example)}</p></div>`:''}
+        </div>
+        <div class="fields">
+          <label>✍️ 내가 쓸 글</label>
+          <textarea class="tx" data-f="text" maxlength="300" placeholder="이 장면에서 일어난 일을 2~3문장으로 써 보세요.&#10;인물의 말은 &quot; &quot; 안에 써요.">${esc(s.text)}</textarea>
+          <div class="count">${s.text.length} / 300자</div>
+        </div>
+      </div>`;
+    el.querySelectorAll('[data-f]').forEach(inp=>inp.oninput = e => {
+      s[inp.dataset.f] = e.target.value; save();
+      if(inp.dataset.f==='text') el.querySelector('.count').textContent = `${e.target.value.length} / 300자`;
+    });
+    el.querySelectorAll('[data-a]').forEach(b=>b.onclick = async () => {
+      const a = b.dataset.a;
+      if(a==='useEx'){
+        if(s.text && !await askConfirm('지금 쓴 글이 예시 글로 바뀌어요. 계속할까요?')) return;
+        s.text = s.example; saveNow();
+        const ta = el.querySelector('textarea'); ta.value = s.text; ta.focus();
+        el.querySelector('.count').textContent = `${s.text.length} / 300자`;
+        toast('예시 글을 가져왔어요. 내 말로 바꾸어 써 보세요!');
+        return;
+      }
+      if(a==='up'){ [B.scenes[i-1],B.scenes[i]] = [B.scenes[i],B.scenes[i-1]]; }
+      if(a==='down'){ [B.scenes[i+1],B.scenes[i]] = [B.scenes[i],B.scenes[i+1]]; }
+      if(a==='ins'){ B.scenes.splice(i+1,0,blankScene()); }
+      if(a==='del'){
+        if(B.scenes.length===1){ toast('장면이 하나는 있어야 해요.'); return; }
+        if(!await askConfirm(`${i+1}번 장면을 삭제할까요?`)) return;
+        B.scenes.splice(i,1);
+      }
+      saveNow(); renderScenes();
+      if(a==='ins') scrollToScene(i+1);
+    });
+    box.appendChild(el);
+  });
+}
+
+/* ───────────── 캔바로 옮기기 ───────────── */
+function bookText(){
+  const B = bookFor(cur);
+  const lines = [`[${B.title||TOPICS[cur].name}]`];
+  if(B.author) lines.push(`지은이: ${B.author}`);
+  B.scenes.forEach((s,i)=>{
+    lines.push('', `${i+1}. ${s.title||'(제목 없음)'}`);
+    lines.push(s.text.trim() || '(아직 글을 쓰지 않았어요)');
+    if(s.guide) lines.push(`(그림: ${s.guide})`);
+  });
+  return lines.join('\n');
+}
+async function copyAll(){
+  saveNow();
+  const t = bookText();
+  try{ await navigator.clipboard.writeText(t); toast('복사했어요! 캔바에서 Ctrl+V로 붙여 넣으세요.'); }
+  catch(e){
+    const m = document.getElementById('copyModal'), ta = document.getElementById('copyText');
+    ta.value = t; m.hidden = false; ta.focus(); ta.select();
+  }
+}
+document.getElementById('copyClose').onclick = () => document.getElementById('copyModal').hidden = true;
+
+/* ───────────── 파일 저장 / 불러오기 ───────────── */
+function exportFile(){
+  saveNow();
+  const B = bookFor(cur);
+  offerFile(`${safeName(B.author)||'그림책'}_${TOPICS[cur].name}.json`,
+    JSON.stringify({app:'goryeo-book', topic:cur, book:B}),
+    '파일로 저장했어요. 다른 컴퓨터에서 [파일 불러오기]로 이어서 할 수 있어요.');
+}
+document.getElementById('loadFile').onchange = e => {
+  const f = e.target.files[0]; if(!f) return;
+  const rd = new FileReader();
+  rd.onload = async () => {
+    try{
+      const d = JSON.parse(rd.result);
+      if(d.app!=='goryeo-book' || !TOPICS[d.topic] || !Array.isArray(d.book?.scenes)) throw 0;
+      if(store[d.topic] && !await askConfirm(`「${TOPICS[d.topic].name}」에 지금 쓴 내용이 있어요. 불러온 파일로 바꿀까요?`)) return;
+      d.book.scenes.forEach(s=>{ s.text = s.text||''; s.example = s.example||''; s.guide = s.guide||''; });
+      store[d.topic] = d.book; saveNow(); cur = d.topic; renderTopics(); renderWork(); toast('그림책을 불러왔어요!');
+    }catch(err){ toast('이 앱에서 저장한 그림책 파일이 아니에요.'); }
+  };
+  rd.readAsText(f); e.target.value = '';
+};
+
+renderTopics();
+</script>
+</body>
+</html>
